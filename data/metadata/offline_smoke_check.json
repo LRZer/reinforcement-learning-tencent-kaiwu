@@ -1,0 +1,25 @@
+{
+  "scope": "Synthetic interface check only; no simulator, historical episode or competition evaluation.",
+  "fixture": "data/examples/synthetic_observation.json",
+  "observation_shape": [
+    3601
+  ],
+  "map_shape": [
+    8,
+    21,
+    21
+  ],
+  "logits_shape": [
+    1,
+    16
+  ],
+  "value_shape": [
+    1,
+    1
+  ],
+  "finite_outputs": true,
+  "illegal_action_probability": 0.0,
+  "greedy_action_on_synthetic_fixture": 7,
+  "numpy_version": "1.26.4",
+  "torch_version": "2.6.0+cpu"
+}

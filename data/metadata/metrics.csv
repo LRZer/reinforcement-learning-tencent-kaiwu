@@ -1,0 +1,36 @@
+metric,scope,description,aggregation,source
+cum_reward,optimizer,Batch mean of per-step shaped rewards; name does not mean cumulative episode return,"Mini-batch/epoch means except reward, advantage and return full-batch statistics; report about every 60 seconds",agent_ppo/algorithm/algorithm.py
+total_loss,optimizer,Value coefficient * value loss + policy loss - entropy coefficient * entropy,"Mini-batch/epoch means except reward, advantage and return full-batch statistics; report about every 60 seconds",agent_ppo/algorithm/algorithm.py
+value_loss,optimizer,Half of the maximum ordinary/clipped value squared error,"Mini-batch/epoch means except reward, advantage and return full-batch statistics; report about every 60 seconds",agent_ppo/algorithm/algorithm.py
+policy_loss,optimizer,Negative mean clipped surrogate objective,"Mini-batch/epoch means except reward, advantage and return full-batch statistics; report about every 60 seconds",agent_ppo/algorithm/algorithm.py
+entropy_loss,optimizer,"Positive categorical entropy, despite the field name","Mini-batch/epoch means except reward, advantage and return full-batch statistics; report about every 60 seconds",agent_ppo/algorithm/algorithm.py
+grad_clip_norm,optimizer,Pre-clipping gradient norm returned by clip_grad_norm_,"Mini-batch/epoch means except reward, advantage and return full-batch statistics; report about every 60 seconds",agent_ppo/algorithm/algorithm.py
+clip_frac,optimizer,"Fraction of sampled action ratios outside [0.8,1.2]","Mini-batch/epoch means except reward, advantage and return full-batch statistics; report about every 60 seconds",agent_ppo/algorithm/algorithm.py
+explained_var,optimizer,1 - residual variance / target variance; zero for near-zero target variance,"Mini-batch/epoch means except reward, advantage and return full-batch statistics; report about every 60 seconds",agent_ppo/algorithm/algorithm.py
+approx_kl,optimizer,Mean sampled-action log(old_prob) - log(new_prob); may be negative,"Mini-batch/epoch means except reward, advantage and return full-batch statistics; report about every 60 seconds",agent_ppo/algorithm/algorithm.py
+ratio_mean,optimizer,Mean importance ratio for sampled actions,"Mini-batch/epoch means except reward, advantage and return full-batch statistics; report about every 60 seconds",agent_ppo/algorithm/algorithm.py
+ratio_std,optimizer,Population standard deviation of sampled action ratios,"Mini-batch/epoch means except reward, advantage and return full-batch statistics; report about every 60 seconds",agent_ppo/algorithm/algorithm.py
+adv_mean,optimizer,Unnormalized full-batch advantage mean,"Mini-batch/epoch means except reward, advantage and return full-batch statistics; report about every 60 seconds",agent_ppo/algorithm/algorithm.py
+adv_std,optimizer,Unnormalized full-batch population standard deviation,"Mini-batch/epoch means except reward, advantage and return full-batch statistics; report about every 60 seconds",agent_ppo/algorithm/algorithm.py
+ret_mean,optimizer,Mean GAE value target,"Mini-batch/epoch means except reward, advantage and return full-batch statistics; report about every 60 seconds",agent_ppo/algorithm/algorithm.py
+train_reward,training episode,Sum of shaped rewards during one episode,One episode; throttled to about one report per 60 seconds (flags aggregated later by dashboard),agent_ppo/workflow/train_workflow.py
+train_total_score,training episode,Environment total_score,One episode; throttled to about one report per 60 seconds (flags aggregated later by dashboard),agent_ppo/workflow/train_workflow.py
+train_step_score,training episode,Environment step_score,One episode; throttled to about one report per 60 seconds (flags aggregated later by dashboard),agent_ppo/workflow/train_workflow.py
+train_treasure_score,training episode,Environment treasure_score,One episode; throttled to about one report per 60 seconds (flags aggregated later by dashboard),agent_ppo/workflow/train_workflow.py
+train_treasures,training episode,Collected treasure count,One episode; throttled to about one report per 60 seconds (flags aggregated later by dashboard),agent_ppo/workflow/train_workflow.py
+train_steps,training episode,Completed environment steps,One episode; throttled to about one report per 60 seconds (flags aggregated later by dashboard),agent_ppo/workflow/train_workflow.py
+train_flash_count,training episode,Environment flash count,One episode; throttled to about one report per 60 seconds (flags aggregated later by dashboard),agent_ppo/workflow/train_workflow.py
+train_terminated_rate,training episode,Capture termination flag,One episode; throttled to about one report per 60 seconds (flags aggregated later by dashboard),agent_ppo/workflow/train_workflow.py
+train_completed_rate,training episode,"Truncated, not captured, steps >= max_step",One episode; throttled to about one report per 60 seconds (flags aggregated later by dashboard),agent_ppo/workflow/train_workflow.py
+train_abnormal_trunc,training episode,"Truncated, not captured, steps < max_step",One episode; throttled to about one report per 60 seconds (flags aggregated later by dashboard),agent_ppo/workflow/train_workflow.py
+train_final_danger,training episode,Final preprocessor danger,One episode; throttled to about one report per 60 seconds (flags aggregated later by dashboard),agent_ppo/workflow/train_workflow.py
+train_final_trea_dist,training episode,Final best visible treasure Euclidean distance,One episode; throttled to about one report per 60 seconds (flags aggregated later by dashboard),agent_ppo/workflow/train_workflow.py
+train_last_flash_ready,training episode,Final estimated flash availability,One episode; throttled to about one report per 60 seconds (flags aggregated later by dashboard),agent_ppo/workflow/train_workflow.py
+train_final_visible_tre,training episode,Final visible treasure count,One episode; throttled to about one report per 60 seconds (flags aggregated later by dashboard),agent_ppo/workflow/train_workflow.py
+train_episode_cnt,training episode,Training episode counter,One episode; throttled to about one report per 60 seconds (flags aggregated later by dashboard),agent_ppo/workflow/train_workflow.py
+val_reward,lightweight validation,Sum of shaped episode rewards,Mean of valid episodes in a round (counter is not averaged); configured 4 total episodes,agent_ppo/workflow/train_workflow.py
+val_total_score,lightweight validation,Environment total_score,Mean of valid episodes in a round (counter is not averaged); configured 4 total episodes,agent_ppo/workflow/train_workflow.py
+val_steps,lightweight validation,Completed environment steps,Mean of valid episodes in a round (counter is not averaged); configured 4 total episodes,agent_ppo/workflow/train_workflow.py
+val_treasures,lightweight validation,Collected treasure count,Mean of valid episodes in a round (counter is not averaged); configured 4 total episodes,agent_ppo/workflow/train_workflow.py
+val_terminated_rate,lightweight validation,Capture flag,Mean of valid episodes in a round (counter is not averaged); configured 4 total episodes,agent_ppo/workflow/train_workflow.py
+val_round_cnt,lightweight validation,Validation round count,Mean of valid episodes in a round (counter is not averaged); configured 4 total episodes,agent_ppo/workflow/train_workflow.py

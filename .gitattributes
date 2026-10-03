@@ -1,0 +1,10 @@
+* text=auto eol=lf
+# Preserve the original exported files exactly, including their line endings.
+agent_ppo/** -text
+agent_diy/** -text
+conf/** -text
+ckpt/** -text
+archive/** -text
+*.pdf binary
+*.png binary
+*.pkl binary

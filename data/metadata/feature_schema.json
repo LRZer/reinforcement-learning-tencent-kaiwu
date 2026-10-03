@@ -1,0 +1,60 @@
+{
+  "total_dimensions": 3601,
+  "flatten_order": [
+    {
+      "name": "hero",
+      "dimensions": 14,
+      "offset_start_inclusive": 0,
+      "offset_end_exclusive": 14,
+      "description": "Hero position, progress, scores, flash cooldown, speed and pressure"
+    },
+    {
+      "name": "monster",
+      "dimensions": 16,
+      "offset_start_inclusive": 14,
+      "offset_end_exclusive": 30,
+      "description": "Two monsters: presence, visibility, relative position, Euclidean distance, speed, direction and distance bucket"
+    },
+    {
+      "name": "treasure",
+      "dimensions": 14,
+      "offset_start_inclusive": 30,
+      "offset_end_exclusive": 44,
+      "description": "Visible target BFS distance, cached target Euclidean distance, counts and frontier distance"
+    },
+    {
+      "name": "buff",
+      "dimensions": 8,
+      "offset_start_inclusive": 44,
+      "offset_end_exclusive": 52,
+      "description": "Estimated buff timer, visible/cached target coordinates, Euclidean distance and flash history"
+    },
+    {
+      "name": "topo",
+      "dimensions": 13,
+      "offset_start_inclusive": 52,
+      "offset_end_exclusive": 65,
+      "description": "Openness, obstacle density, branch count, dead-end risk, wall proximity and eight directional reachable-area ratios"
+    },
+    {
+      "name": "memory",
+      "dimensions": 8,
+      "offset_start_inclusive": 65,
+      "offset_end_exclusive": 73,
+      "description": "Revisit ratio, unique positions, stuck flag, displacement, exploration target direction, unexplored ratio and no-progress flag"
+    },
+    {
+      "name": "map",
+      "dimensions": 3528,
+      "offset_start_inclusive": 73,
+      "offset_end_exclusive": 3601,
+      "description": "8 x 21 x 21 channels: traversable, obstacles, hero, monsters, treasures, buffs, visit heat and danger"
+    }
+  ],
+  "map_shape": [
+    8,
+    21,
+    21
+  ],
+  "source": "agent_ppo/feature/preprocessor.py; agent_ppo/model/model.py"
+}

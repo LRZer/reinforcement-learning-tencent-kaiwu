@@ -1,0 +1,452 @@
+{
+  "checkpoint": "ckpt/model.ckpt-34055.pkl",
+  "bytes": 316415,
+  "sha256": "4be175c78cdf1c350678070b9fb501556a636fa9c36289dda08c366d4040f030",
+  "format": "PyTorch state_dict; model weights only",
+  "optimizer_state_available": false,
+  "strict_model_load": true,
+  "parameter_count": 75814,
+  "tensor_count": 44,
+  "all_tensors_finite": true,
+  "parameters_by_module": {
+    "hero_encoder": 1536,
+    "monster_encoder": 1600,
+    "treasure_encoder": 1536,
+    "buff_encoder": 1344,
+    "topo_encoder": 1504,
+    "memory_encoder": 1344,
+    "map_encoder": 28464,
+    "type_gate": 3269,
+    "fusion": 33024,
+    "actor_head": 2064,
+    "critic_head": 129
+  },
+  "tensors": [
+    {
+      "name": "hero_encoder.net.0.weight",
+      "shape": [
+        32,
+        14
+      ],
+      "dtype": "torch.float32",
+      "elements": 448,
+      "finite": true
+    },
+    {
+      "name": "hero_encoder.net.0.bias",
+      "shape": [
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 32,
+      "finite": true
+    },
+    {
+      "name": "hero_encoder.net.2.weight",
+      "shape": [
+        32,
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 1024,
+      "finite": true
+    },
+    {
+      "name": "hero_encoder.net.2.bias",
+      "shape": [
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 32,
+      "finite": true
+    },
+    {
+      "name": "monster_encoder.net.0.weight",
+      "shape": [
+        32,
+        16
+      ],
+      "dtype": "torch.float32",
+      "elements": 512,
+      "finite": true
+    },
+    {
+      "name": "monster_encoder.net.0.bias",
+      "shape": [
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 32,
+      "finite": true
+    },
+    {
+      "name": "monster_encoder.net.2.weight",
+      "shape": [
+        32,
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 1024,
+      "finite": true
+    },
+    {
+      "name": "monster_encoder.net.2.bias",
+      "shape": [
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 32,
+      "finite": true
+    },
+    {
+      "name": "treasure_encoder.net.0.weight",
+      "shape": [
+        32,
+        14
+      ],
+      "dtype": "torch.float32",
+      "elements": 448,
+      "finite": true
+    },
+    {
+      "name": "treasure_encoder.net.0.bias",
+      "shape": [
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 32,
+      "finite": true
+    },
+    {
+      "name": "treasure_encoder.net.2.weight",
+      "shape": [
+        32,
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 1024,
+      "finite": true
+    },
+    {
+      "name": "treasure_encoder.net.2.bias",
+      "shape": [
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 32,
+      "finite": true
+    },
+    {
+      "name": "buff_encoder.net.0.weight",
+      "shape": [
+        32,
+        8
+      ],
+      "dtype": "torch.float32",
+      "elements": 256,
+      "finite": true
+    },
+    {
+      "name": "buff_encoder.net.0.bias",
+      "shape": [
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 32,
+      "finite": true
+    },
+    {
+      "name": "buff_encoder.net.2.weight",
+      "shape": [
+        32,
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 1024,
+      "finite": true
+    },
+    {
+      "name": "buff_encoder.net.2.bias",
+      "shape": [
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 32,
+      "finite": true
+    },
+    {
+      "name": "topo_encoder.net.0.weight",
+      "shape": [
+        32,
+        13
+      ],
+      "dtype": "torch.float32",
+      "elements": 416,
+      "finite": true
+    },
+    {
+      "name": "topo_encoder.net.0.bias",
+      "shape": [
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 32,
+      "finite": true
+    },
+    {
+      "name": "topo_encoder.net.2.weight",
+      "shape": [
+        32,
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 1024,
+      "finite": true
+    },
+    {
+      "name": "topo_encoder.net.2.bias",
+      "shape": [
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 32,
+      "finite": true
+    },
+    {
+      "name": "memory_encoder.net.0.weight",
+      "shape": [
+        32,
+        8
+      ],
+      "dtype": "torch.float32",
+      "elements": 256,
+      "finite": true
+    },
+    {
+      "name": "memory_encoder.net.0.bias",
+      "shape": [
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 32,
+      "finite": true
+    },
+    {
+      "name": "memory_encoder.net.2.weight",
+      "shape": [
+        32,
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 1024,
+      "finite": true
+    },
+    {
+      "name": "memory_encoder.net.2.bias",
+      "shape": [
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 32,
+      "finite": true
+    },
+    {
+      "name": "map_encoder.conv.0.weight",
+      "shape": [
+        16,
+        8,
+        3,
+        3
+      ],
+      "dtype": "torch.float32",
+      "elements": 1152,
+      "finite": true
+    },
+    {
+      "name": "map_encoder.conv.0.bias",
+      "shape": [
+        16
+      ],
+      "dtype": "torch.float32",
+      "elements": 16,
+      "finite": true
+    },
+    {
+      "name": "map_encoder.conv.2.weight",
+      "shape": [
+        32,
+        16,
+        3,
+        3
+      ],
+      "dtype": "torch.float32",
+      "elements": 4608,
+      "finite": true
+    },
+    {
+      "name": "map_encoder.conv.2.bias",
+      "shape": [
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 32,
+      "finite": true
+    },
+    {
+      "name": "map_encoder.conv.5.weight",
+      "shape": [
+        64,
+        32,
+        3,
+        3
+      ],
+      "dtype": "torch.float32",
+      "elements": 18432,
+      "finite": true
+    },
+    {
+      "name": "map_encoder.conv.5.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "torch.float32",
+      "elements": 64,
+      "finite": true
+    },
+    {
+      "name": "map_encoder.proj.0.weight",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "torch.float32",
+      "elements": 4096,
+      "finite": true
+    },
+    {
+      "name": "map_encoder.proj.0.bias",
+      "shape": [
+        64
+      ],
+      "dtype": "torch.float32",
+      "elements": 64,
+      "finite": true
+    },
+    {
+      "name": "type_gate.0.weight",
+      "shape": [
+        32,
+        96
+      ],
+      "dtype": "torch.float32",
+      "elements": 3072,
+      "finite": true
+    },
+    {
+      "name": "type_gate.0.bias",
+      "shape": [
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 32,
+      "finite": true
+    },
+    {
+      "name": "type_gate.2.weight",
+      "shape": [
+        5,
+        32
+      ],
+      "dtype": "torch.float32",
+      "elements": 160,
+      "finite": true
+    },
+    {
+      "name": "type_gate.2.bias",
+      "shape": [
+        5
+      ],
+      "dtype": "torch.float32",
+      "elements": 5,
+      "finite": true
+    },
+    {
+      "name": "fusion.0.weight",
+      "shape": [
+        128,
+        128
+      ],
+      "dtype": "torch.float32",
+      "elements": 16384,
+      "finite": true
+    },
+    {
+      "name": "fusion.0.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "torch.float32",
+      "elements": 128,
+      "finite": true
+    },
+    {
+      "name": "fusion.2.weight",
+      "shape": [
+        128,
+        128
+      ],
+      "dtype": "torch.float32",
+      "elements": 16384,
+      "finite": true
+    },
+    {
+      "name": "fusion.2.bias",
+      "shape": [
+        128
+      ],
+      "dtype": "torch.float32",
+      "elements": 128,
+      "finite": true
+    },
+    {
+      "name": "actor_head.weight",
+      "shape": [
+        16,
+        128
+      ],
+      "dtype": "torch.float32",
+      "elements": 2048,
+      "finite": true
+    },
+    {
+      "name": "actor_head.bias",
+      "shape": [
+        16
+      ],
+      "dtype": "torch.float32",
+      "elements": 16,
+      "finite": true
+    },
+    {
+      "name": "critic_head.weight",
+      "shape": [
+        1,
+        128
+      ],
+      "dtype": "torch.float32",
+      "elements": 128,
+      "finite": true
+    },
+    {
+      "name": "critic_head.bias",
+      "shape": [
+        1
+      ],
+      "dtype": "torch.float32",
+      "elements": 1,
+      "finite": true
+    }
+  ],
+  "inspection_torch_version": "2.6.0+cpu",
+  "scope": "Structural compatibility and numeric integrity; no game performance measured."
+}

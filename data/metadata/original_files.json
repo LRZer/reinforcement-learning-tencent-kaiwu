@@ -1,0 +1,404 @@
+{
+  "source_package": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1",
+  "files": [
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/.kaiwu.sign",
+      "repository_path": null,
+      "bytes": 857,
+      "sha256": "f115b5fe0b1b430894887c48dcf38b54eff340ff733f4391c710f4548dacaa18",
+      "decision": "opaque platform signing artifact; original retained locally, hash recorded"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_diy/__init__.py",
+      "repository_path": "agent_diy/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_diy/agent.py",
+      "repository_path": "agent_diy/agent.py",
+      "bytes": 2386,
+      "sha256": "69dfd735e40f04d3238694c7c5c85b89e630c004f63a7c091a889e2ba7580cdf",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_diy/algorithm/__init__.py",
+      "repository_path": "agent_diy/algorithm/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_diy/algorithm/algorithm.py",
+      "repository_path": "agent_diy/algorithm/algorithm.py",
+      "bytes": 475,
+      "sha256": "416ec3906e5a6e6f5f699838921f1da54d3b515ed6fe2ea9178226486a8485fd",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_diy/conf/__init__.py",
+      "repository_path": "agent_diy/conf/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_diy/conf/conf.py",
+      "repository_path": "agent_diy/conf/conf.py",
+      "bytes": 944,
+      "sha256": "38b00b210617635c58cd2c36a30186b8cb9964ee9e0eaf0cfeced2108c25d27b",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_diy/conf/monitor_builder.py",
+      "repository_path": "agent_diy/conf/monitor_builder.py",
+      "bytes": 2095,
+      "sha256": "5e55f1406578a563c03a39267c38093b39e802a7ac40cf47e0a47814ebc9ddbf",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_diy/conf/train_env_conf.toml",
+      "repository_path": "agent_diy/conf/train_env_conf.toml",
+      "bytes": 2370,
+      "sha256": "125dd3c16f11435c83c9cc0b85d0006a34ca06e3e65442dcfef022957b779142",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_diy/feature/__init__.py",
+      "repository_path": "agent_diy/feature/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_diy/feature/definition.py",
+      "repository_path": "agent_diy/feature/definition.py",
+      "bytes": 1704,
+      "sha256": "888aaaaa09f509dd9536c97f3dc45d59697d0f18986f592f96319233a756650a",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_diy/model/__init__.py",
+      "repository_path": "agent_diy/model/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_diy/model/model.py",
+      "repository_path": "agent_diy/model/model.py",
+      "bytes": 569,
+      "sha256": "70db184b77b94330ff7daec3b5fe5f723269b3db37585b73ff1ed9b73b58c554",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_diy/workflow/__init__.py",
+      "repository_path": "agent_diy/workflow/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_diy/workflow/train_workflow.py",
+      "repository_path": "agent_diy/workflow/train_workflow.py",
+      "bytes": 1424,
+      "sha256": "97b82b0707177d6c143ec20017a7bfafa1e49864cae9fddfa47fa732c5008974",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/__init__.py",
+      "repository_path": "agent_ppo/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/__pycache__/__init__.cpython-311.pyc",
+      "repository_path": null,
+      "bytes": 157,
+      "sha256": "ec9818cabec1af094bb1f7ef78f51e0564accd76e9fec8b9083c75bb4fc6bce8",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/__pycache__/agent.cpython-311.pyc",
+      "repository_path": null,
+      "bytes": 9416,
+      "sha256": "b676e965d65f99f92b8863ec7b70b3eae49f5787959dc3fa18173a492638bf49",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/agent.py",
+      "repository_path": "agent_ppo/agent.py",
+      "bytes": 4768,
+      "sha256": "1aba932ed133c9f7dd677b96e59dd834d189590aa86d7e76f05ac6ca18fc48ac",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/algorithm/__init__.py",
+      "repository_path": "agent_ppo/algorithm/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/algorithm/__pycache__/__init__.cpython-311.pyc",
+      "repository_path": null,
+      "bytes": 167,
+      "sha256": "160f6d8fa66a87698f9a6078dffe284e3b6ba97ed70cb10b67ee1b6119536ffa",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/algorithm/__pycache__/algorithm.cpython-311.pyc",
+      "repository_path": null,
+      "bytes": 15969,
+      "sha256": "6f7e6cb1001477ad922758c680674b7752250be65cadf621564a6eea973b25d7",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/algorithm/algorithm.py",
+      "repository_path": "agent_ppo/algorithm/algorithm.py",
+      "bytes": 8735,
+      "sha256": "e5a6efd1128e86ea8fc827caefecc400c97319a753fda4caceaec46c7e4aa6d0",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/conf/__init__.py",
+      "repository_path": "agent_ppo/conf/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/conf/__pycache__/__init__.cpython-311.pyc",
+      "repository_path": null,
+      "bytes": 162,
+      "sha256": "0444ea022e866a4d252e1688a8dec12a56b263f4ac5bc55a80220cadd98f7ca8",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/conf/__pycache__/conf.cpython-310.pyc",
+      "repository_path": null,
+      "bytes": 3130,
+      "sha256": "14801ba4751e187e3a2da48fed98a3164ee748e0b06cc562348d70541c7817bd",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/conf/__pycache__/conf.cpython-311.pyc",
+      "repository_path": null,
+      "bytes": 3643,
+      "sha256": "22599563a748f8d0b7ab2eecbeeaaeca42d066ecbeaa71db0738a8efa6726e29",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/conf/__pycache__/monitor_builder.cpython-311.pyc",
+      "repository_path": null,
+      "bytes": 5497,
+      "sha256": "8d03298ab839d81b9eb8c699d93e02adff463bd848d13be0a61293afa5fc2952",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/conf/conf.py",
+      "repository_path": "agent_ppo/conf/conf.py",
+      "bytes": 4573,
+      "sha256": "bedadf3114e9ace34579952d40dd4d184de7637aff8b246760b915a932d2408e",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/conf/monitor_builder.py",
+      "repository_path": "agent_ppo/conf/monitor_builder.py",
+      "bytes": 3987,
+      "sha256": "7c04fb09ded1087333ef5171ddc3bcf771cd5e5a7a7cb187f06c6a198f95f68c",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/conf/train_env_conf.toml",
+      "repository_path": "agent_ppo/conf/train_env_conf.toml",
+      "bytes": 2363,
+      "sha256": "b1c3a4e861f464bff4114f374cbee76249e1d5e282b525a8060c9f78ff4dda27",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/feature/__init__.py",
+      "repository_path": "agent_ppo/feature/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/feature/__pycache__/__init__.cpython-311.pyc",
+      "repository_path": null,
+      "bytes": 165,
+      "sha256": "5f6fc67e5964087d7d1882233ce39c1008845a8353fdda4095fe94159f213a69",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/feature/__pycache__/definition.cpython-311.pyc",
+      "repository_path": null,
+      "bytes": 4935,
+      "sha256": "c3f7245e1f265139b93355b258a663d822f6967f3686b9f4d6d576068df181e3",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/feature/__pycache__/preprocessor.cpython-310.pyc",
+      "repository_path": null,
+      "bytes": 30947,
+      "sha256": "77567eb3d733ec009261c9781f965d9101fe2c329897756124274a37c85f488f",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/feature/__pycache__/preprocessor.cpython-311.pyc",
+      "repository_path": null,
+      "bytes": 62665,
+      "sha256": "8b8950f6e8656fa8fde117efedb0a204caed9391b6a84425d4386bf66fa3d285",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/feature/definition.py",
+      "repository_path": "agent_ppo/feature/definition.py",
+      "bytes": 2851,
+      "sha256": "2fa464781c9eb80919e0da24e3c75a72ad0dfe38f95e1b95918fa8918f2e5b86",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/feature/preprocessor.py",
+      "repository_path": "agent_ppo/feature/preprocessor.py",
+      "bytes": 46846,
+      "sha256": "ebd495a4b1ac2fddf72cf83d2633ab7ca99cba2a01573b83d4b07863cd754304",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/model/__init__.py",
+      "repository_path": "agent_ppo/model/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/model/__pycache__/__init__.cpython-311.pyc",
+      "repository_path": null,
+      "bytes": 163,
+      "sha256": "06f310f462e695b242aadcf8b496742fb8d50313eef33550e92e7a165755fd35",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/model/__pycache__/model.cpython-311.pyc",
+      "repository_path": null,
+      "bytes": 9269,
+      "sha256": "e80a3b8c211f5d09ca962d4b456d76d8675022c0fc8153bfdc945c8974ee4b78",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/model/model.py",
+      "repository_path": "agent_ppo/model/model.py",
+      "bytes": 4278,
+      "sha256": "18fec48413f8f396e36c4e494bd1fc704c043aa9aeeaed1f4a7b10651af56dcd",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/workflow/__init__.py",
+      "repository_path": "agent_ppo/workflow/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/workflow/__pycache__/__init__.cpython-311.pyc",
+      "repository_path": null,
+      "bytes": 166,
+      "sha256": "d2de63e7b18c6449fb32a1046a397b763afca2776e493b0f552c8019e78b0ddc",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/workflow/__pycache__/train_workflow.cpython-311.pyc",
+      "repository_path": null,
+      "bytes": 17908,
+      "sha256": "f74ea4904467825328f06f211c9b13687dff5b6ca806063dfc966141fbce20ae",
+      "decision": "generated Python bytecode; reproducible from source"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/agent_ppo/workflow/train_workflow.py",
+      "repository_path": "agent_ppo/workflow/train_workflow.py",
+      "bytes": 13400,
+      "sha256": "bcc17edb7624436e12ab9205b51e9e2f432a41c6a9ec7dbf53312da0dc6bab2b",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/ckpt/id_list",
+      "repository_path": "ckpt/id_list",
+      "bytes": 29,
+      "sha256": "46bbe2d7031eb4d73682f3f170848f4a6fa56392ec0600249533207396824193",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/ckpt/kaiwu.json",
+      "repository_path": "ckpt/kaiwu.json",
+      "bytes": 506,
+      "sha256": "886424a5cf5addd0876e4a54a2f67723828ba5d09f75b7e6609ad063c065bc42",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/ckpt/model.ckpt-34055.pkl",
+      "repository_path": "ckpt/model.ckpt-34055.pkl",
+      "bytes": 316415,
+      "sha256": "4be175c78cdf1c350678070b9fb501556a636fa9c36289dda08c366d4040f030",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/conf/.gitignore",
+      "repository_path": "conf/.gitignore",
+      "bytes": 9,
+      "sha256": "e3033586beb3406ed33427f01238322b2d121a7502ed6cc9279c9a23c3ae8eb0",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/conf/__init__.py",
+      "repository_path": "conf/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/conf/algo_conf_gorge_chase.toml",
+      "repository_path": "conf/algo_conf_gorge_chase.toml",
+      "bytes": 613,
+      "sha256": "986eedc6b64343c08a0233ffd692a2455fb14536a95846d51b88ef5fd06caa69",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/conf/app_conf_gorge_chase.toml",
+      "repository_path": "conf/app_conf_gorge_chase.toml",
+      "bytes": 211,
+      "sha256": "8fc47f90b8a6216700014c7b0e882998b4474f6d7cb120385a1e9ac37accbdcb",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/conf/configure_app.toml",
+      "repository_path": "conf/configure_app.toml",
+      "bytes": 5332,
+      "sha256": "197865ad3c2d397f3f3a5953c354783e3179eb62dbec39edd003a5b4a734c46f",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "gorge_chase-ppo-34055-2026_04_27_09_07_26-15.0.1/conf/configure_app.toml.bk",
+      "repository_path": "archive/configure_app.toml.bk",
+      "bytes": 5332,
+      "sha256": "5a0b908b1ae4e77b2914c74b2c4d4b9916f2d6786bafc049906ea309f9c8eea8",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "人工智能综合实践课程报告_PPO峡谷寻宝 .pdf",
+      "repository_path": "docs/reports/course-report.pdf",
+      "bytes": 868462,
+      "sha256": "5bd8c11c29b4b2f1bf6f3366d0858c8a1420d80d9cda88b5e9482cfd4a4bc54f",
+      "decision": "preserved byte-for-byte"
+    },
+    {
+      "source": "项目介绍.pdf",
+      "repository_path": "docs/reports/task-guide.pdf",
+      "bytes": 1664634,
+      "sha256": "ef24603ac154d79edff7e8d4f42dad8db16767fdc50919ce1f1e366d71eb0c38",
+      "decision": "preserved byte-for-byte"
+    }
+  ]
+}

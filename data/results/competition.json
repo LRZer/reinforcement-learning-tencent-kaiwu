@@ -1,0 +1,32 @@
+{
+  "competition_zh": "第十七届中国大学生服务外包创新创业大赛",
+  "competition_en": "17th China University Student Service Outsourcing Innovation and Entrepreneurship Competition (descriptive translation)",
+  "division_zh": "东部区域赛 · 人工智能专项赛道",
+  "division_en": "Eastern Regional Competition · Artificial Intelligence Track",
+  "team": "ChatGPT",
+  "preliminary_rank": 37,
+  "preliminary_teams": 158,
+  "leaderboard_average_score": 997.15,
+  "completed_episodes": 150,
+  "total_episodes": 150,
+  "advanced_to_final": false,
+  "award_zh": "区域三等奖",
+  "award_en": "Regional Third Prize",
+  "award_certificate_month": "2026-06",
+  "report_date": "2026-08-28",
+  "evidence": {
+    "rank_and_score": "docs/reports/course-report.pdf, physical page 3; screenshot confirms team, rank, average score and completed episodes",
+    "total_teams_and_final_status": "docs/reports/course-report.pdf, physical page 3, report text",
+    "award": "docs/reports/course-report.pdf, physical page 4, embedded certificate"
+  },
+  "scope": "Historical competition record; not a new evaluation of the archived checkpoint.",
+  "unavailable": [
+    "per-episode competition scores",
+    "leaderboard aggregation configuration",
+    "training time series",
+    "validation time series",
+    "ablation measurements",
+    "hardware configuration",
+    "random seeds for the historical evaluation"
+  ]
+}
