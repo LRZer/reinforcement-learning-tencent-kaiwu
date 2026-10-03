@@ -120,7 +120,7 @@ def architecture(lang):
 
 
 def workflow(lang):
-    fig,ax = canvas(choose('采样、优化与独立验证','Sampling, optimization and held-out validation',lang),choose('图示为现有代码的配置流程；历史训练曲线和验证日志未留存','Configured workflow in the archived code; historical training curves and validation logs are unavailable',lang),9)
+    fig,ax = canvas(choose('采样、优化与留出地图验证','Sampling, optimization and held-out-map validation',lang),choose('图示为现有代码的配置流程；历史训练曲线和验证日志未留存','Configured workflow in the archived code; historical training curves and validation logs are unavailable',lang),9)
     box(ax,1,62,22,18,choose('训练环境\n地图 1-8，按顺序轮换\n10 宝箱 / 2 BUFF / 1000 步','Training environment\nMaps 1-8, sequential rotation\n10 treasures / 2 buffs / 1000 steps',lang),TEAL,11)
     box(ax,29,62,23,18,choose('Actor 与预处理器\n特征、地图、BFS、记忆\n合法动作上的随机采样','Actor + preprocessor\nFeatures, map, BFS and memory\nSample over legal actions',lang),BLUE,11)
     box(ax,59,62,18,18,choose('整局轨迹\nGAE：γ=0.99\nλ=0.95','Episode trajectory\nGAE: γ=0.99\nλ=0.95',lang),TEAL,11)
@@ -130,7 +130,7 @@ def workflow(lang):
     arrow(ax,(91,61.5),(91,50.5))
     box(ax,38,32,25,18,choose('模型同步与保存\n模型池同步：1 分钟\nworkflow 保存：1800 秒','Model synchronization / save\nModel-pool sync: 1 minute\nWorkflow save: 1800 seconds',lang),TEAL,11)
     arrow(ax,(71.5,41),(63.5,41)); arrow(ax,(45,50.5),(41,61.5))
-    box(ax,1,10,27,22,choose('独立验证环境\n地图 9、10\n每轮共 4 局 / 间隔 600 秒\n使用当前模型的最大概率动作','Held-out validation\nMaps 9 and 10\n4 episodes total / 600-second interval\nGreedy actions from current weights',lang),GOLD,10.5)
+    box(ax,1,10,27,22,choose('留出地图轻量验证\n复用同一环境：地图 9、10\n每轮共 4 局 / 间隔 600 秒\n使用当前模型的最大概率动作','Held-out-map validation\nReuse environment: maps 9 and 10\n4 episodes total / 600-second interval\nGreedy actions from current weights',lang),GOLD,10.5)
     box(ax,38,10,35,13,choose('val_* 指标单独上报\n不发送训练样本、不做梯度更新','Report val_* metrics separately\nNo training samples or gradient updates',lang),GOLD,11)
     arrow(ax,(28.5,21),(37.5,17),GOLD)
     ax.text(76,14,choose('首次验证可立即触发\n不是每张图各 4 局','First round can start immediately\n4 episodes total, not per map',lang),fontsize=10.5,color=MUTED)

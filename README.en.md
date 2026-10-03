@@ -1,152 +1,230 @@
-# Tencent Kaiwu: PPO Treasure-Hunting Agent
+# Tencent Kaiwu RL Competition: PPO Gorge Chase Agent
 
-[中文](README.md) · [Technical details](docs/method.en.md) · [Result evidence](docs/results.en.md) · [Data inventory](data/README.md)
+[中文](README.md) · [Technical details](docs/method.en.md) · [Results and evidence](docs/results.en.md) · [Data inventory](data/README.md)
 
-This project develops an agent for Tencent Kaiwu's `gorge_chase` environment (峡谷追猎). The agent controls Luban No. 7, collects treasures, evades pursuing monsters, and decides when to use speed buffs and directional flash. It combines **PPO, separate MLP/CNN encoders and a learned type gate** with local BFS features, target caches and explicit behavioral memory.
+This project participated in the Artificial Intelligence Track of the Eastern Regional Competition of the 17th China University Student Service Outsourcing Innovation and Entrepreneurship Competition (descriptive English translation). It trains a Luban No. 7 agent in Tencent Kaiwu's `gorge_chase` environment (峡谷追猎, called “treasure hunting” in the course report). The objective is to collect treasures while evading monsters, survive longer, and decide when to use speed buffs and flash.
 
-At each step, nearby terrain, threats, resources and recent behavior become features. A neural network selects a movement or flash action, and training updates that policy from reward feedback.
+The solution combines **PPO, six MLP branches, a local-map CNN, learned gated fusion, BFS features and explicit memory**. Each step encodes the observation and accumulated information into state, selects an action with the policy network, and uses episode trajectories to update policy and value estimates. Historical records show **preliminary rank 37/158, leaderboard average score 997.15 and Regional Third Prize**; see [results](#7-competition-results-and-model-record) for evidence and interpretation.
 
-The project participated in the **17th China University Student Service Outsourcing Innovation and Entrepreneurship Competition, Eastern Regional Competition, Artificial Intelligence Track** (descriptive English translation). This repository archives the competition code, the final package's checkpoint, the original report and task guide, with bilingual technical figures and structured result data.
+Reading guide: [task](#1-task-and-technical-challenges) → [workflow](#2-technical-workflow) → [state and memory](#3-state-representation-and-explicit-memory) → [architecture](#4-model-architecture-and-action-selection) → [reward](#5-reward-design) → [PPO](#6-ppo-optimization-and-training-configuration) → [results](#7-competition-results-and-model-record) → [boundaries](#8-implementation-boundaries-and-evidence-scope) → [repository](#9-code-materials-and-contributors).
 
-Reading order: [task and scoring](#task-and-scoring) → [network and observation](#network-and-observation) → [reward design](#reward-design) → [technical workflow and training](#technical-workflow-and-training). Field definitions, equations and implementation boundaries are collected in the [technical documentation](docs/method.en.md).
+## 1. Task and technical challenges
 
-## Competition results
+The hero moves on a **128 × 128** grid and receives a **21 × 21** local map centered on itself each frame. Two monsters appear over time and pursue the hero. Treasures add score, buffs temporarily increase speed, and flash crosses terrain subject to cooldown. Each decision step executes one discrete action.
 
-![Competition results and evidence](docs/figures/results.en.svg)
+<img src="docs/evidence/environment-map.png" width="440" alt="Task-guide map illustration showing hero, monsters, obstacles and resources">
 
-| Item | Result | Evidence |
-|---|---:|---|
-| Preliminary rank | **37 / 158** | Report p. 3 text; screenshot confirms rank 37 |
-| Leaderboard average score | **997.15** | Leaderboard screenshot, team `ChatGPT` |
-| Completed / total episodes | **150 / 150** | Same screenshot |
-| Regional award | **Third Prize** | Certificate on p. 4, June 2026 |
-| Final qualification | Did not advance | Report p. 3 text |
-
-These are historical results recorded in the supplied materials. The episode count describes completed evaluations, not a win rate. Per-episode scores, training curves, validation logs and ablation data are unavailable; no score variance, module improvement or held-out-map result is claimed. See [evidence and interpretation](docs/results.en.md).
-
-## Task and scoring
-
-The hero moves in a **128 × 128** grid and observes a **21 × 21** local region. Two monsters appear over time and pursue the hero. Treasures add score, buffs temporarily increase movement speed, and flash crosses terrain subject to a cooldown.
-
-<img src="docs/evidence/environment-map.png" width="400" alt="Task-guide illustration of an environment map">
-
-Map illustration from task-guide p. 2.
-
-The [task guide](docs/reports/task-guide.pdf), pp. 3–9, defines the episode score as:
+The illustration comes from p. 2 of the [original task guide](docs/reports/task-guide.pdf). Its scoring rules on pp. 3–9 define:
 
 $$S = 1.5 \times \text{survived steps} + 100 \times \text{treasures collected}.$$
 
-The environment offers 10 public maps and 5 hidden evaluation maps. The archived local configuration trains on maps 1–8 and reserves maps 9 and 10 for lightweight validation. Hidden maps are provided by the competition platform. **Training reward differs from competition score:** it also includes safety, terrain, flash quality and anti-loitering terms.
+| Technical issue | Implemented treatment |
+|---|---|
+| Local visibility makes target information transient | Remember seen treasure and buff locations, explored regions, visit heat and recent behavior |
+| Straight-line distances miss obstacles and connectivity | Eight-neighbor BFS, directional reachable-area ratios, topology summaries and a map CNN |
+| Resource collection and safety require joint decisions | Encode threats, resources and terrain separately, combine context through a gate, and condition rewards on risk |
+| Policy updates must use returns while retaining exploration | GAE, PPO policy/value clipping, entropy regularization, advantage normalization and gradient clipping |
 
-## Implemented work
+The environment provides 10 public maps and five hidden evaluation maps. The archived configuration cycles through maps 1–8 for training and uses maps 9 and 10 for lightweight held-out-map validation. Hidden maps are supplied by the competition platform. The table states implementations and design purposes; measured module contributions are addressed under [evidence scope](#8-implementation-boundaries-and-evidence-scope).
 
-| Component | Implementation | Source |
+## 2. Technical workflow
+
+![Sampling, optimization, model synchronization and held-out-map validation](docs/figures/workflow.en.svg)
+
+| Stage | Data flow | Implementation |
 |---|---|---|
-| State representation | 73 structured dimensions + 8 map channels, 3601 dimensions total | [preprocessor.py](agent_ppo/feature/preprocessor.py) |
-| Local search and memory | Eight-neighbor BFS, reachable-area ratios, decaying treasure cache, buff-location cache, exploration and visit memory | Same file |
-| Policy network | Six independent MLP encoders, a map CNN, a five-branch context gate and actor/critic heads | [model.py](agent_ppo/model/model.py) |
-| Optimization | PPO policy/value clipping, GAE, advantage normalization, entropy regularization and gradient clipping | [algorithm.py](agent_ppo/algorithm/algorithm.py), [definition.py](agent_ppo/feature/definition.py) |
-| Reward shaping | Treasure, survival, danger, squeeze, terrain, buff, flash quality and loitering in safe states | [configuration](agent_ppo/conf/conf.py), preprocessor |
-| Training workflow | Episode trajectories, model synchronization, periodic saving and separate `val_*` monitoring | [train_workflow.py](agent_ppo/workflow/train_workflow.py) |
+| ① Build state | Reset memory for a new episode; read hero, monsters, resources, map and skill state; update caches/history; form a 3601D observation and a separate 16D action mask | [Preprocessor](agent_ppo/feature/preprocessor.py), [observation flattening](agent_ppo/feature/definition.py) |
+| ② Select an action | Produce 16 logits and one state value, apply the mask to construct probabilities, and sample during training | [Network](agent_ppo/model/model.py), [agent](agent_ppo/agent.py) |
+| ③ Execute and receive feedback | Execute the action; processing the next frame computes reward from score, monster distances, terrain, resources and episode-ending changes | Preprocessor, [training workflow](agent_ppo/workflow/train_workflow.py) |
+| ④ Process the trajectory | Store state, mask, action, reward, done, old value and full old action distribution; compute GAE backward after the episode | [Samples and GAE](agent_ppo/feature/definition.py) |
+| ⑤ Optimize and synchronize | Send trajectories to the platform pool; the learner samples, performs PPO updates and synchronizes weights; the sampling agent loads `latest` at each new episode | [PPO optimizer](agent_ppo/algorithm/algorithm.py), [platform configuration](conf/configure_app.toml) |
+| ⑥ Lightweight validation | Pause training sampling, reuse the same environment with maps 9 and 10, and select maximum-probability actions; trajectories only supply `val_*` statistics | Training workflow |
 
-These describe implemented functions. Their individual contributions to the competition score have not been measured by ablation experiments.
+One decision follows observation → features/memory → network → masked probabilities → action. Gradient updates occur on the learner using probabilities and values recorded when sampling. Each validation round has four episodes total, with a configured 600-second interval. A zero-initialized timer allows the first round after the first training episode. Validation neither sends training samples nor calls gradient updates.
 
-The CNN encodes spatial terrain; BFS supplies local distances around obstacles and connectivity features; caches retain previously observed resources. The policy network chooses the action. Treasure confidence is multiplied by 0.995 and visit heat by 0.97 per preprocessing call. Exploration targets follow remembered treasure → remembered buff → unknown cell. The preprocessor maintains memory, and the network consumes the current observation containing those memory features. Global caches contain only previously observed information.
+## 3. State representation and explicit memory
 
-## Network and observation
+### 3.1 Observation layout
 
-![Actor-Critic network architecture](docs/figures/architecture.en.svg)
+The input is **73 structured dimensions + 3528 map dimensions = 3601 dimensions**. The action mask is passed separately to probability processing and sample storage. Fields use reference-scale normalization and, where specified, clipping. See the [feature schema](data/metadata/feature_schema.json) for complete definitions.
 
-The **actor** produces action preferences, converted to probabilities for movement or flash. The **critic** estimates future discounted training rewards from the current state; training uses this estimate to assess whether an action's outcome was better or worse than expected. Both heads share the encoders and fusion network.
-
-| Input branch | Dimensions | Contents |
-|---|---:|---|
-| Hero | 14 | Position, progress, scores, skill cooldown, movement speed |
-| Monsters | 16 | Presence, visibility, relative position, distance and speed of two monsters |
-| Treasures | 14 | Visible-target BFS distance, cached-target Euclidean distance and exploration frontier |
-| Buffs | 8 | Estimated timer, visible or cached targets and flash history |
-| Topology | 13 | Openness, obstacle density, branches, dead-end risk, wall proximity and eight reachable-area ratios |
-| Memory | 8 | Revisits, position diversity, displacement, exploration direction and no-progress flag |
-| Local map | 3528 | `8 × 21 × 21`: traversable cells, obstacles, hero, monsters, treasures, buffs, visit heat and danger |
-
-The layer sequence below omits the batch dimension:
-
-| Stage | Layers and shapes | Role |
+| Branch | Size / flattened slice | Information and use |
 |---|---|---|
-| Structured encoders | Six separate MLPs, each `input size → 32 → 32`, with ReLU after each layer | Encode hero, monsters, treasures, buffs, topology and memory independently |
-| Map encoder | `8×21×21 → Conv16 → Conv32 → MaxPool2 → Conv64 → global average pool → Linear64` | Convolutions use 3×3 kernels and padding=1; convolutions and projection are followed by ReLU; spatial size after max pooling is 10×10; output is 64D |
-| Learned gate | `hero32 + map64 → Linear32 → ReLU → Linear5 → Softmax` | Five weights sum to 1; their weighted sum of monster, treasure, buff, topology and memory embeddings forms context32 |
-| Fusion | `hero32 + map64 + context32 → 128 → 128`, both layers followed by ReLU | Hero and map embeddings enter fusion directly and also determine the context weights |
-| Output heads | Actor: `128 → 16`; critic: `128 → 1` | Produce action logits and one state-value estimate |
+| Hero | 14 / `[0:14]` | Position, progress, scores, treasure count, flash availability/cooldown, speed and monster-stage information |
+| Monsters | 16 / `[14:30]` | Two slots: presence, visibility, relative position, Euclidean distance, speed, relative direction and distance bucket |
+| Treasures | 14 / `[30:44]` | Visible/cached proportions, visible-target BFS distance, cached-target Euclidean distance/confidence and unknown-region distance |
+| Buffs | 8 / `[44:52]` | Effect timer, visible or cached target position/distance, previous-action flash flag and flash count |
+| Topology | 13 / `[52:65]` | Openness, obstacle density, neighboring traversable fraction, dead-end risk, wall proximity and eight reachable-area ratios |
+| Memory | 8 / `[65:73]` | Revisits, position diversity, stuck flag, displacement, exploration direction, unknown fraction and no-progress flag |
+| Local map | 3528 / `[73:3601]` | `8 × 21 × 21` spatial tensor encoded by the CNN |
 
-For example, changing monster and resource information on the same terrain changes the context-branch embeddings; gate weights are computed from hero and map embeddings. Per-state gate weights were not retained, so branch weights in specific situations cannot be reported.
+The eight map channels are **traversability, obstacles, hero, monsters, visible treasures, visible buffs, visit heat and danger heat**. Map danger decays exponentially within a monster's 7×7 neighborhood and takes the maximum where monsters overlap. Rewards use a separate scalar danger measure derived from monster distances and speed.
 
-There are **16 actions**: 0–7 move east, northeast, north, northwest, west, southwest, south and southeast; 8–15 flash in the same directions. After the network produces logits, the agent applies the environment's 16D legal-action mask to construct probabilities. Training samples actions; validation takes the maximum probability. The mask mainly reflects skill availability; a legal movement can still hit a wall.
+### 3.2 Local BFS and targets
 
-The model has **75,814 parameters**. The archived checkpoint contains **44 tensors**, loads strictly into the network and passes numeric and forward-output checks. See [method details](docs/method.en.md) for tensor shapes, parameter allocation and reward formulas.
+BFS (breadth-first search) computes reachable distances from the map center with equal-cost eight-neighbor connectivity and supplies visible-treasure ordering. Each direction also starts a search from the neighboring first cell, producing reachable cells / local traversable cells. Openness, dead-end and wall-proximity summaries provide terrain information.
 
-## Reward design
+Visible treasures are ordered by BFS distance and candidate value; remembered treasures by Euclidean distance. Buff targeting prefers visible resources, then remembered locations. Monster and buff BFS distances also support diagnostics and rewards. Search results and selected targets enter as features; the network chooses movement or flash.
 
-The step reward sums increments for scoring, risk and action quality. The competition leaderboard uses the environment score defined above.
+### 3.3 Memory updates
 
-![Event increments in the training reward](docs/figures/rewards.en.svg)
-
-| Category | Key values and conditions | Behavior addressed |
+| Memory | Update rule | Retained information |
 |---|---|---|
-| Score and resources | About +0.03 per ordinary surviving step; +1.20 per treasure; +0.35 per buff collected | Survival and resource collection |
-| Safety and terrain | Distance-gain coefficient 0.10, danger-reduction coefficient 0.12, squeeze-reduction coefficient 0.08; penalties for dead ends and wall proximity | Distance from monsters, relief from two-monster pressure and terrain choice |
-| Target progress | Treasure-approach coefficient 0.015 when danger <0.35 and no treasure is collected; buff-approach coefficient 0.012 with additional effect-state and target-distance conditions | Progress toward targets under lower risk |
-| Action quality | −0.03 for displacement <0.1; −0.10 when safe, with no resource gain and endpoint distance <5 across a 10-position window | Wall collisions and local loitering |
-| Flash quality | High-risk effective escape +0.20, otherwise −0.12; medium-risk escape into more open terrain +0.08, otherwise −0.04; low-risk safe treasure gain +0.04, otherwise −0.05 | Flash evaluated by pre-action risk, distance, danger and terrain changes |
-| Episode end | Capture −2.00; step-limit completion +1.20; abnormal truncation −0.50 | Distinguish episode-ending conditions |
+| Treasure cache | Multiply by 0.995 each preprocessing call; visible locations become 1; candidate threshold >0.35; collection clears the hero's 3×3 neighborhood | Previously seen, uncleared locations and decaying values |
+| Buff locations | Retain seen positions for the episode | Respawning resource locations; memory does not establish current availability |
+| Visit heat | Multiply by 0.97; add 0.35 at the current location, capped at 1 | Frequently visited recent regions, cropped into a local-map channel |
+| Behavior history | 20 positions, 12 actions and six displacements | Revisits, stuck behavior, no progress and flash history |
+| Exploration target | Nearest remembered treasure → remembered buff → unknown cell | Direction toward a subsequent exploration target |
 
-Coefficients are multiplied by the corresponding distance changes, risk or terrain measures. Several events may add at the same step. “Effective escape” is a reward condition. These values describe code configuration; see [reward shaping](docs/method.en.md#5-reward-shaping) for all equations and thresholds.
+Global caches use 128×128 arrays and accumulate observed information only. The preprocessor explicitly maintains memory; the network consumes the current input containing those memory features. Reset clears state each episode, and preprocessing calls advance cache decay and internal timers.
 
-## Technical workflow and training
+## 4. Model architecture and action selection
 
-![Sampling and validation workflow](docs/figures/workflow.en.svg)
+![Separate encoders, gated fusion and actor-critic heads](docs/figures/architecture.en.svg)
 
-1. **Build state:** reset caches and history for each episode; process the current observation into local BFS, resource targets, risk, map and memory features, then flatten to 3601 dimensions.
-2. **Choose and execute an action:** the network produces logits and `V(s)`; sample after masking. The environment executes the action, and preprocessing the next observation computes reward from the resulting changes.
-3. **Collect the trajectory:** store state, mask, action, reward, done flag, old value and the full old action distribution. At episode end, compute GAE backward to obtain advantage `A` and value target `A + V`; the final next-state value is zero.
-4. **Update the model:** send the trajectory to the platform pool. The learner takes 512 samples, normalizes advantages, and performs four PPO epochs with mini-batches of 256. Pool sampling is uniform and old-sample removal is FIFO.
-5. **Synchronize and validate:** platform configuration synchronizes models every minute; the training workflow loads `latest` at the start of an episode. Validation uses maximum-probability actions on maps 9 and 10, four episodes total per round, reporting `val_*` means without sending trajectories to the pool.
+### 4.1 Encoders
 
-GAE (generalized advantage estimation) combines rewards, current/next state values and later feedback to estimate how an outcome differs from the value prediction. PPO constructs its policy objective from the selected action's new probability divided by its stored behavior-policy probability. Clipping uses `[0.8, 1.2]` to limit objective gains from large probability changes. The critic fits `A + V`, and entropy regularization encourages continued action exploration.
+Each structured branch uses its own two-layer MLP (multilayer perceptron): `branch size → Linear32 → ReLU → Linear32 → ReLU`, producing 32D. The map CNN (convolutional neural network) encodes two-dimensional spatial relationships. Shapes below omit the batch dimension.
 
-The joint loss is `L = L_policy + 0.5 L_value − 0.005 H(π)`. In this code, `L_value` already includes `0.5 × max(ordinary squared error, clipped squared error)`. See [PPO and samples](docs/method.en.md#4-ppo-and-samples) for policy/value clipping, advantage normalization and gradient clipping.
+| Map-encoding stage | Output shape |
+|---|---|
+| Input map | `8 × 21 × 21` |
+| 3×3 convolution, 16 channels + ReLU | `16 × 21 × 21` |
+| 3×3 convolution, 32 channels + ReLU | `32 × 21 × 21` |
+| 2×2 max pooling | `32 × 10 × 10` |
+| 3×3 convolution, 64 channels + ReLU | `64 × 10 × 10` |
+| Adaptive average pooling to 1×1, flatten | `64` |
+| Linear64 + ReLU | `64` |
 
-| Environment | Archived value | PPO | Archived value |
+All convolutions use stride=1 and padding=1; max pooling uses stride=2. Structured branches encode entity and behavior summaries; the CNN produces a local spatial embedding.
+
+### 4.2 Learned gate and fusion
+
+Let the hero embedding be $h_h\in\mathbb{R}^{32}$ and the map embedding $h_m\in\mathbb{R}^{64}$. Concatenate them into 96D and apply `Linear32 → ReLU → Linear5 → Softmax` to obtain five weights:
+
+$$\alpha=\operatorname{softmax}(\operatorname{MLP}_{gate}([h_h,h_m])),\qquad c=\sum_{i=1}^{5}\alpha_i h_i.$$
+
+The five $h_i$ are monster, treasure, buff, topology and memory embeddings, each 32D. Weights are nonnegative and sum to one; context $c$ is 32D. Hero/map information determines the gate; entity information participates through its branch and corresponding map channels.
+
+Fusion directly concatenates **hero32 + map64 + context32 = 128D**, then applies two `Linear128 → ReLU` layers. Hero and map feed both the gate and fusion; the five context branches are weighted and summed before fusion.
+
+### 4.3 Heads and actions
+
+| Output | Shape | Use |
+|---|---|---|
+| Actor, the policy head | `128 → 16` logits | Action preferences, converted to masked probabilities for action selection |
+| Critic, the value head | `128 → 1` | Future discounted training reward estimate, used by advantage computation and value learning |
+
+Actions **0–7** move east, northeast, north, northwest, west, southwest, south and southeast; **8–15** flash in the corresponding directions. Reference flash distance is 10 for cardinal directions and eight diagonally. The legal-action mask mainly reflects skill availability; a legal movement can still hit a wall. Training samples the probability distribution, while lightweight validation chooses its maximum.
+
+![Input dimensions and parameter allocation](docs/figures/profiles.en.svg)
+
+The network has **75,814 parameters**. The archived checkpoint contains **44 float32 tensors** and matches the current architecture strictly. Module counts and tensor shapes are in the [checkpoint metadata](data/metadata/checkpoint_inspection.json). Actor and critic share the encoders and fusion network.
+
+## 5. Reward design
+
+Training rewards provide feedback on score, risk and behavior after an action. Competition scoring follows the environment formula in Section 1. Step reward sums the following conditional terms.
+
+![Conditional event increments in reward shaping](docs/figures/rewards.en.svg)
+
+| Category | Key configuration and conditions |
+|---|---|
+| Survival and resources | `0.02 × positive step-score change`, about +0.03 per ordinary surviving step; +1.20 per treasure; +0.35 per buff collected |
+| Safety | Distance-gain coefficient 0.10, danger-reduction coefficient 0.12 and squeeze-reduction coefficient 0.08; multiply these terms by 1.3 when steps ≥500 or danger >0.55 |
+| Terrain | Dead-end and wall coefficients −0.05 and −0.02; coefficient +0.03 for openness above 0.35; all multiplied by `max(danger, 0.25)` |
+| Target approach | Treasure coefficient 0.015 when danger <0.35 and no treasure gain; buff coefficient 0.012 when inactive, with no current resource gain, danger <0.55, buff distance ≤18 and treasure distance >4 |
+| Invalid movement and loitering | Previous action exists and displacement <0.1: −0.03; danger <0.35, no resource gain and endpoint distance <5 across a 10-position window: −0.10 |
+| Episode end | Capture −2.00; step-limit completion +1.20; abnormal truncation −0.50 |
+
+Flash tiers use risk before the action and are checked in high → medium → low order. Let reference flash distance be $R$:
+
+| Risk tier | Condition for positive reward | Satisfied / otherwise |
+|---|---|---|
+| High: danger ≥0.55 or nearest monster distance ≤6 | Euclidean distance gain ≥0.55R, or danger reduction ≥0.25, or BFS distance gain ≥0.60R | +0.20 / −0.12 |
+| Medium: danger ≥0.30 or nearest monster distance ≤10 | Euclidean gain ≥0.35R, or danger reduction ≥0.08, or BFS gain ≥0.40R; additionally openness gain ≥0.05 | +0.08 / −0.04 |
+| Low | Treasure collected and current danger <0.35 | +0.04 / −0.05 |
+
+Distance-change terms are normalized and clipped; terrain terms are scaled by danger. The chart shows configured event increments, and multiple terms may apply at one step. See [reward-shaping details](docs/method.en.md#5-reward-shaping) for danger definitions, complete equations and reference thresholds.
+
+## 6. PPO optimization and training configuration
+
+### 6.1 Advantages and value targets from trajectories
+
+Trajectories retain sampling-time state values $V_{old}$ and the full action distribution $\pi_{old}$. GAE (generalized advantage estimation) works backward from the final step, combining immediate reward, next-state value and later feedback to estimate how an outcome differs from expectations:
+
+$$\delta_t=r_t+\gamma(1-d_t)V_{old}(s_{t+1})-V_{old}(s_t),\qquad A_t=\delta_t+\gamma\lambda(1-d_t)A_{t+1}.$$
+
+Here $d_t$ marks episode end, $r_t$ is shaped reward, $\gamma=0.99$ and $\lambda=0.95$. The value target is $A_t+V_{old}(s_t)$, stored as `reward_sum`. The final next-state value is zero; capture and all truncations count as done. Advantages are normalized within each learner batch.
+
+### 6.2 Policy, value and joint losses
+
+PPO (proximal policy optimization) compares the selected action's new and stored probabilities, uses advantages to adjust the policy, and clips objective gains from excessive probability changes:
+
+$$\rho_t=\frac{\pi_\theta(a_t\mid s_t)}{\pi_{old}(a_t\mid s_t)},\qquad L_{policy}=-\mathbb{E}\left[\min\left(\rho_t A_t,\operatorname{clip}(\rho_t,0.8,1.2)A_t\right)\right].$$
+
+The critic fits the value target with value clipping; entropy $H(\pi)$ encourages action exploration. The combined loss is:
+
+$$L=L_{policy}+0.5L_{value}-0.005H(\pi).$$
+
+This code's $L_{value}$ already includes `0.5 × max(ordinary squared error, clipped-value squared error)`. Each 512-sample learner batch runs four epochs, reshuffling each epoch and updating in mini-batches of 256. Gradient norm is clipped to 0.5 before Adam updates. See [PPO and samples](docs/method.en.md#4-ppo-and-samples) for the sample fields and exact calculations.
+
+### 6.3 Archived settings and monitoring
+
+| Environment setting | Value | Optimization / sampling setting | Value |
 |---|---|---|---|
-| Training / validation maps | 1–8 / 9 and 10 | γ / GAE λ | 0.99 / 0.95 |
+| Training / lightweight validation maps | 1–8 / 9 and 10 | γ / GAE λ | 0.99 / 0.95 |
 | Treasures / buffs | 10 / 2 | Adam learning rate | 3 × 10⁻⁴ |
 | Buff respawn / flash cooldown | 200 / 200 steps | Policy/value clip range | 0.2 |
 | Second monster / monster speedup | 200 / 300 steps | Entropy / value coefficient | 0.005 / 0.5 |
 | Episode step limit | 1000 | Epochs / mini-batch | 4 / 256 |
-| Lightweight validation | 4 episodes total per round, 600-second interval | Learner batch / pool capacity | 512 / 2048 |
+| Validation episodes / interval | Four total per round / 600 seconds | Learner batch / pool capacity | 512 / 2048 |
+| Model sync / workflow-save interval | 60 / 1800 seconds | Pool sampling / removal | Uniform / FIFO |
 
-Training monitors distinguish environment score, summed shaped reward, steps, treasures and episode-ending states; optimization diagnostics include losses, entropy and probability ratios. See the [metric dictionary](data/metadata/metrics.csv). The 600-second value is the configured validation interval; its zero-initialized timer allows the first round after the first training episode.
+The platform uses a MinSize limiter and a preload ratio of 0.5 of pool capacity. These describe pool configuration. Monitoring separates environment score, summed shaped reward, survival steps, treasure count and episode-ending state. Optimization diagnostics include losses, entropy, probability ratios, clip fraction and gradient norm. See the [metric dictionary](data/metadata/metrics.csv) and [configuration snapshot](data/metadata/configuration.json).
 
-Original lightweight validation repeats preprocessing of the same frame. The environment speeds up monsters at step 300, while some feature/reward references use 500. BFS supplies approximate local connectivity, and its eight-neighbor search does not fully enforce diagonal movement constraints. See [implementation boundaries](docs/method.en.md#7-implementation-boundaries) for precise semantics; historical validation results are unavailable.
+## 7. Competition results and model record
 
-## Repository map
+![Historical competition results and evidence sources](docs/figures/results.en.svg)
 
-```text
-agent_ppo/       Original PPO agent, features, network, rewards and workflow
-agent_diy/       Original unimplemented DIY template; not a comparison baseline
-conf/           Original platform runtime configuration
-ckpt/           Checkpoint 34055, id_list and kaiwu.json
-archive/        Previous evaluation configuration: 54627 (weights unavailable)
-data/           Competition CSV/JSON, feature/weight metadata and SHA-256 inventory
-docs/           Bilingual technical/results documentation, PDFs, evidence and figures
-scripts/        Weight/integrity inspection and figure tools
-tests/          Offline checks of the original numerical code
-```
+| Record | Value | Original evidence |
+|---|---|---|
+| Preliminary rank | **37 / 158** | Report p. 3 text; screenshot confirms rank 37, while total team count comes from report text |
+| Leaderboard average score | **997.15** | [Leaderboard screenshot](docs/evidence/leaderboard.png), team `ChatGPT` |
+| Completed / total episodes | **150 / 150** | Completed-episode column in the same screenshot |
+| Regional award | **Third Prize, Artificial Intelligence Track** | [Certificate](docs/evidence/award-certificate.png), June 2026, Eastern Regional Competition |
+| Final status | Did not advance | Report p. 3 text |
 
-The supplied directory contains 57 files. Forty are preserved byte for byte with provenance; 16 reproducible Python cache files and one platform signing artifact are excluded, with hashes and reasons in the [archive inventory](data/metadata/original_files.json). Historical trajectories and map data were not supplied. The [synthetic observation](data/examples/synthetic_observation.json) is an interface fixture, not a recorded game.
+150/150 counts completed evaluations; it cannot establish win rate or the fraction surviving to the step limit. The historical platform mean 997.15 cannot be decomposed into mean survival and mean treasures alone. Full context is in the [course report](docs/reports/course-report.pdf); machine-readable records are available as [JSON](data/results/competition.json) and [CSV](data/results/competition.csv).
 
-## Contributors and sources
+The archived model is [model.ckpt-34055.pkl](ckpt/model.ckpt-34055.pkl), 316,415 bytes, storing a network `state_dict`. Platform metadata records `train_step=34055` and export date 2026-04-27. The report calls it the final training package, but the leaderboard does not show a submitted model ID, so checkpoint records and score evidence are listed separately. This identifier is not interpreted as environment interactions; see the [model record](docs/results.en.md#checkpoint-record).
 
-The report lists Liu Runzhang (刘润章), Chen Xudong (陈旭东) and Nan Yibo (南怡波), each contributing approximately one third of solution development and iteration. Chen prepared the report, Nan the slides, and Liu the explanatory video. The supplied directory contains no slide deck or video. The [report](docs/reports/course-report.pdf) and [task guide](docs/reports/task-guide.pdf) are preserved as supplied; see [NOTICE](NOTICE.md) for third-party attribution.
+## 8. Implementation boundaries and evidence scope
 
-Algorithm references: [PPO](https://arxiv.org/abs/1707.06347), [GAE](https://arxiv.org/abs/1506.02438). SVG and PNG figures are in `docs/figures/`; see [figure provenance](docs/results.en.md#figure-provenance).
+| Scope | Meaning of the available implementation / materials |
+|---|---|
+| Local BFS | Unreachable or out-of-view targets fall back to distance 20; diagonal search checks only the destination; directional search may return through the center, producing identical scores within one component |
+| Stateful preprocessing | Original lightweight validation processes the same frame repeatedly, advancing caches, timers and history again; official platform evaluation uses another workflow |
+| Environment and reference constants | Environment speedup is configured at step 300, while some stage/reward references use 500; a 10-position loiter window spans nine position changes under one call per frame |
+| Structural statistics | Input sizes, parameter counts and reward-event charts come from code or static weight inspection; per-state gate activations were not retained |
+| Performance evidence | Leaderboard mean, rank and certificate are retained; per-episode scores, training/validation curves, hidden-map breakdowns, hardware/timing records and ablations are unavailable |
+
+Individual module gains, score variance, flash success rate and generalization improvement therefore have no quantitative record. See [implementation details](docs/method.en.md#7-implementation-boundaries) and [evidence documentation](docs/results.en.md) for semantics, statistical interpretation and figure provenance.
+
+## 9. Code, materials and contributors
+
+| Path | Contents |
+|---|---|
+| [agent_ppo/](agent_ppo/) | Agent entry point, features/memory, network, PPO optimization, rewards and training workflow |
+| [agent_diy/](agent_diy/) | Original unimplemented platform DIY template |
+| [conf/](conf/) | Platform pool, model synchronization and evaluation configuration |
+| [ckpt/](ckpt/) | Model 34055, index and `kaiwu.json` |
+| [archive/](archive/) | Previous configuration referencing 54627; those weights were not retained |
+| [data/](data/) | Competition CSV/JSON, feature schema, configuration, metrics, checkpoint metadata and original-file hashes |
+| [docs/](docs/) | Bilingual technical/results documents, two original PDFs, leaderboard/certificate evidence and five bilingual figure types in SVG/PNG |
+| [scripts/](scripts/) / [tests/](tests/) | Figure generation, weight/integrity inspection tools and checks of original numerical logic |
+
+Of 57 source files, 40 are preserved byte for byte. Hashes and exclusion reasons for 16 Python cache files and one platform signing artifact are recorded in the [source inventory](data/metadata/original_files.json). Online training trajectories and original map assets were not saved in the supplied directory. The [synthetic observation](data/examples/synthetic_observation.json) is a labeled interface example. See the [data inventory](data/README.md) for provenance and purpose.
+
+The report lists **Liu Runzhang (刘润章), Chen Xudong (陈旭东) and Nan Yibo (南怡波)**, each contributing approximately one third of solution development and iteration. Chen prepared the report, Nan the slides, and Liu the explanatory video. This archive includes the original report and task guide; slides and video were not supplied. Third-party code and material attribution is documented in [NOTICE](NOTICE.md).
+
+Algorithm references: [Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347), [Generalized Advantage Estimation](https://arxiv.org/abs/1506.02438).

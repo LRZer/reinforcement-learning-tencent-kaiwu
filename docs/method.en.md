@@ -134,7 +134,7 @@ Episode metrics are reported approximately every 60 seconds; validation averages
 
 ## 7. Implementation boundaries
 
-Lightweight validation calls `observation_process` initially and after each step, then calls `exploit(env_obs)`, which processes the same frame again. Because preprocessing is stateful, this repeats cache, timer and history updates. Official platform evaluation uses a separate workflow; no lightweight-validation values were retained.
+Lightweight validation pauses training sampling and reuses the same environment object with a separate configuration for maps 9 and 10; sample use and metric reporting are separate. It calls `observation_process` initially and after each step, then calls `exploit(env_obs)`, which processes the same frame again. Because preprocessing is stateful, this repeats cache, timer and history updates. Official platform evaluation uses a separate workflow; no lightweight-validation values were retained.
 
 The environment speeds up monsters at step 300, while the hero-stage feature and reward-pressure reference use 500. `LOITER_WINDOW=10` compares `[-1]` and `[-10]`, spanning nine position changes under one call per frame; 10 is the position-window length. BFS diagonal adjacency differs from the simulator's edge constraint, and directional search can return through the center. These describe code semantics without assigning a performance gain.
 
